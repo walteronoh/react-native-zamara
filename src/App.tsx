@@ -8,7 +8,7 @@ import Login from './components/Login';
 import Logout from './components/Logout';
 import Staff from './components/Staff';
 import Continents from './components/Continents';
-import HeaderBar from './components/HeaderBar';
+import HeaderBar from './components/shared/HeaderBar';
 
 const Stack = createNativeStackNavigator();
 

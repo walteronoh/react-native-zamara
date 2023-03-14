@@ -2,9 +2,9 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { View, Button, Text } from "react-native";
 import { Icon } from "react-native-elements";
-import Continents from './Continents';
-import Logout from './Logout';
-import Staff from './Staff';
+import Continents from '../Continents';
+import Logout from '../Logout';
+import Staff from '../Staff';
 
 interface HeaderBarProps {
     title: string
