@@ -1,25 +1,23 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import { View, Button, Text } from "react-native";
-import { Icon } from "react-native-elements";
 import Continents from '../Continents';
+import Home from '../Home';
 import Logout from '../Logout';
 import Staff from '../Staff';
+import { DashboardDrawerParamList } from '../types/types';
 
 interface HeaderBarProps {
-    title: string
+    title?: string
 }
 
-const Drawer = createDrawerNavigator();
+const Drawer = createDrawerNavigator<DashboardDrawerParamList>();
 
 export default function HeaderBar(props: HeaderBarProps) {
     return (
-        <NavigationContainer>
-            <Drawer.Navigator initialRouteName="Home">
-                <Drawer.Screen name="Staff" component={Staff} />
-                <Drawer.Screen name="Continents" component={Continents} />
-                <Drawer.Screen name="Logout" component={Logout} />
-            </Drawer.Navigator>
-        </NavigationContainer>
+        <Drawer.Navigator initialRouteName="Home">
+            <Drawer.Screen name="Home" component={Home} />
+            <Drawer.Screen name="Staff" component={Staff} />
+            <Drawer.Screen name="Continents" component={Continents} />
+            <Drawer.Screen name="Logout" component={Logout} />
+        </Drawer.Navigator>
     );
 }

@@ -25,6 +25,7 @@ export default function Staff() {
 
     return (
         <View>
+            <Button title="Add Staff" />
             <CustomTable header={tableHead} data={data} />
         </View>
     );

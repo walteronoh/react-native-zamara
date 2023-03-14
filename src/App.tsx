@@ -1,26 +1,19 @@
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from './components/Home';
 import Login from './components/Login';
-import Logout from './components/Logout';
-import Staff from './components/Staff';
-import Continents from './components/Continents';
 import HeaderBar from './components/shared/HeaderBar';
+import { RootStackParamList } from './components/types/types';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen name="login" options={{ headerTitle: () => HeaderBar({ title: "Login"})}} component={Login}></Stack.Screen> */}
-        <Stack.Screen name="home" options={{ headerTitle: () => HeaderBar({ title: "Home"})}}  component={Home}></Stack.Screen>
-        <Stack.Screen name="logout" options={{ headerTitle: () => HeaderBar({ title: "Logout"})}} component={Logout}></Stack.Screen>
-        <Stack.Screen name="staff" options={{ headerTitle: () => HeaderBar({ title: "Staff"})}}  component={Staff}></Stack.Screen>
-        <Stack.Screen name="continents" options={{ headerTitle: () => HeaderBar({ title: "Continents"})}}  component={Continents}></Stack.Screen>
+        <Stack.Screen name="Login" options={{ title: ""}} component={Login}></Stack.Screen>
+        <Stack.Screen name="Dashboard" options={{ title: ""}} component={HeaderBar}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
