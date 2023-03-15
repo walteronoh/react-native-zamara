@@ -1,23 +1,26 @@
 import { useEffect, useState } from "react";
-import { View, Button, Text, TextInput, GestureResponderEvent, Modal, StyleSheet, Pressable, Alert } from "react-native";
+import { View, Button, Text, TextInput, GestureResponderEvent, Modal, StyleSheet, Pressable, Alert, ScrollView, SafeAreaView } from "react-native";
+import { Icon } from "react-native-elements";
 import ApiService from "../service/api.service";
+import Mail from "../service/mail.service";
 import CustomTable from "./shared/CustomTable";
-import { AddStaffProps } from "./types/types";
+import { AddStaffProps, EmailBodies, EmailSubjects } from "./types/types";
 
 export default function Staff() {
     const apiService = new ApiService();
+    const mail = new Mail();
     const [modalVisible, setModalVisible] = useState(false);
     const tableHead = ["Id", "Staff Number", "Staff Name", "Staff Email", "Department", "Salary"];
     const data = [[0, "ZAM001", "Walter Kiprono", "walter@zamara.co.ke", "ICT", 90000],
     [1, "ZAM002", "Zeddy Jeru", "zeddy@zamara.co.ke", "HR", 80000]];
     const [staffData, setStaffData] = useState(Array<string | number>);
-    const [allStaff, setAllStaff] = useState(Array<Array<string|number>>);
+    const [allStaff, setAllStaff] = useState(Array<Array<string | number>>);
 
-    useEffect(() => { handleFetchStaff(); if(!modalVisible) setStaffData([])}, [modalVisible]);
+    useEffect(() => { handleFetchStaff(); if (!modalVisible) setStaffData([]) }, [modalVisible]);
 
     const handleFetchStaff = () => {
         apiService.fetchStaffApiService().then((response) => {
-            if(response.length > 0) {
+            if (response.length > 0) {
                 // append to table
                 let a: Array<any> = [];
                 response.map((r) => {
@@ -43,6 +46,7 @@ export default function Staff() {
                 if(response.isValid) {
                     Alert.alert("Success", response.message);
                     handleFetchStaff();
+                    mail.send([input.staffEmail], EmailSubjects.CREATED, EmailBodies.CREATED, input.staffName);
                 } else {
                     Alert.alert("Error", response.message); 
                 }
@@ -81,7 +85,11 @@ export default function Staff() {
                     defaultValue={input.salary + ""}
                     onChangeText={txt => setInput({ ...input, salary: Number(txt) })}
                 />
-                <Button title="Save" onPress={handleAddStaff}></Button>
+                <Pressable
+                    style={[styles.button, styles.buttonEdit]}
+                    onPress={(e) => handleAddStaff(e)}>
+                    <Text style={styles.textStyle}>Save</Text>
+                </Pressable>
             </View>
         );
     }
@@ -95,22 +103,24 @@ export default function Staff() {
 
         const handleEditStaff = (e: GestureResponderEvent) => {
             apiService.updateStaffApiService(input).then((response) => {
-                if(response.isValid) {
+                if (response.isValid) {
                     Alert.alert("Success", response.message);
                     handleFetchStaff();
+                    mail.send([input.staffEmail], EmailSubjects.UPDATED, EmailBodies.UPDATED, staffData[2]);
                 } else {
-                    Alert.alert("Error", response.message); 
+                    Alert.alert("Error", response.message);
                 }
             });
         }
 
-        const handleDeleteStaff = (e: GestureResponderEvent) => { 
+        const handleDeleteStaff = (e: GestureResponderEvent) => {
             apiService.deleteStaffApiService(staffData[0] + "").then((response) => {
-                if(response.isValid) {
+                if (response.isValid) {
                     Alert.alert("Success", response.message);
                     handleFetchStaff();
+                    mail.send([input.staffEmail], EmailSubjects.DELETED, EmailBodies.DELETED, staffData[2]);
                 } else {
-                    Alert.alert("Error", response.message); 
+                    Alert.alert("Error", response.message);
                 }
             });
         }
@@ -147,8 +157,17 @@ export default function Staff() {
                     defaultValue={input.salary + ""}
                     onChangeText={txt => setInput({ ...input, salary: Number(txt) })}
                 />
-                <Button title="Edit" onPress={handleEditStaff}></Button>
-                <Button title="Delete" onPress={handleDeleteStaff}></Button>
+                {/* <Button title="Edit" onPress={handleEditStaff}></Button> */}
+                <Pressable
+                    style={[styles.button, styles.buttonEdit]}
+                    onPress={(e) => handleEditStaff(e)}>
+                    <Text style={styles.textStyle}>Edit</Text>
+                </Pressable>
+                <Pressable
+                    style={[styles.button, styles.buttonDelete]}
+                    onPress={(e) => handleDeleteStaff(e)}>
+                    <Text style={styles.textStyle}>Delete</Text>
+                </Pressable>
             </View>
         );
     }
@@ -189,6 +208,22 @@ export default function Staff() {
             fontWeight: 'bold',
             textAlign: 'center',
         },
+        buttonEdit: {
+            padding: 14,
+            backgroundColor: '#2196F3',
+        },
+        buttonAdd: {
+            alignSelf: "flex-end",
+            margin: 15,
+            width: 200,
+            padding: 14,
+            backgroundColor: '#2196F3',
+        },
+        buttonDelete: {
+            marginTop: 15,
+            padding: 10,
+            backgroundColor: '#ccc'
+        }
     });
 
     return (
@@ -209,8 +244,14 @@ export default function Staff() {
                     </View>
                 </View>
             </Modal>
-            <Button title="Add Staff" onPress={() => { setModalVisible(true) }} />
-            <CustomTable header={tableHead} data={allStaff} onRowClick={(data) => handleRowClick(data)} />
+            <Pressable
+                    style={[styles.button, styles.buttonAdd]}
+                    onPress={(e) => { setModalVisible(true) }}>
+                    <Text style={styles.textStyle}> + Add Staff</Text>
+                </Pressable>
+            <SafeAreaView>
+                <CustomTable header={tableHead} data={allStaff} onRowClick={(data) => handleRowClick(data)} />
+            </SafeAreaView>
         </View>
     );
 }

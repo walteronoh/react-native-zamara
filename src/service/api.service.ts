@@ -1,6 +1,6 @@
-import RNSmtpMailer from "react-native-smtp-mailer";
 import { ApiServiceReturnTypes, ContinentTypes, LoginEndpointDataTypes, LoginTypes, StaffInputsTypes } from "../components/types/types";
 import { XMLParser } from "fast-xml-parser";
+import Mail from "./mail.service";
 
 export default class ApiService {
     AuthApi = "https://dummyjson.com/auth/login";
@@ -127,23 +127,6 @@ export default class ApiService {
                 isValid: false,
                 message: "Seems Like There Was An Error Deleting Staff Details. Please Try Again Later."
             };
-        });
-    }
-
-    async sendEmailService() {
-        await RNSmtpMailer.sendMail({
-            mailhost: "mail.smtpbucket.com",
-            port: "8025",
-            ssl: true,
-            username: "",
-            password: "",
-            recipients: "walterkiprono81@gmail.com",
-            subject: "Testing Smtp Client",
-            htmlBody: "<p>Smtp Client</p>",
-        }).then((res) => {
-            console.log(res);
-        }).catch((e) => {
-            console.log(e)
         });
     }
 }
