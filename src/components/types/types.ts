@@ -20,7 +20,7 @@ export interface LoginEndpointDataTypes {
 }
 
 export interface StaffInputsTypes {
-    id?: number,
+    _id?: string,
     staffNumber: string,
     staffName: string,
     staffEmail: string,
@@ -29,6 +29,7 @@ export interface StaffInputsTypes {
 };
 
 export const AddStaffProps: StaffInputsTypes = {
+    _id: "",
     staffNumber: "",
     staffName: "",
     staffEmail: "",

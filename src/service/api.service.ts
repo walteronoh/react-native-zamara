@@ -45,30 +45,17 @@ export default class ApiService {
         }).catch(() => []);
      }
 
-    async fetchStaffApiService() {
-        return fetch(this.StaffApiUrl, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-        }).then((response) => {
-            if(response.status == 200) {
-                return {
-                    isValid: true,
-                    message: "Staff Successfully Fetched"
-                };
-            }
-            return {
-                isValid: false,
-                message: response.statusText
-            };
+    async fetchStaffApiService(): Promise<StaffInputsTypes[]|[]> {
+        return fetch(this.StaffApiUrl).then((response) => response.text()).then((response) => {
+            let r: Array<StaffInputsTypes> = JSON.parse(response);
+            return r;
         }).catch((e) => {
-            return {
-                isValid: false,
-                message: "Seems Like There Was An Error Fetching Staff. Please Try Again Later."
-            };
+            return [];
         });
     }
 
     async addStaffApiService(body: StaffInputsTypes): Promise<ApiServiceReturnTypes> {
+        delete body._id;
         return fetch(this.StaffApiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -94,11 +81,14 @@ export default class ApiService {
     }
 
     async updateStaffApiService(body: StaffInputsTypes) {
-        return fetch(this.StaffApiUrl + "/" + body.id, {
+        const id = body._id;
+        delete body._id;
+        return fetch(this.StaffApiUrl + "/" + id, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)
         }).then((response) => {
+            console.log(response);
             if(response.status == 200) {
                 return {
                     isValid: true,
@@ -117,7 +107,7 @@ export default class ApiService {
         });
     }
 
-    async deleteStaffApiService(id: number) {
+    async deleteStaffApiService(id: string) {
         return fetch(this.StaffApiUrl + "/" + id, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
