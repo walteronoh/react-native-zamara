@@ -1,13 +1,26 @@
+import { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import Session from "../service/session.service";
 
 export default function Home() {
+    const session = new Session();
+    const [userInfo, setUserInfo] = useState({ FullName: "", Email: "", Gender: ""});
+
+    useEffect(() => {
+        handleScreenLoad();
+    }, []);
+
+    const handleScreenLoad = async () => {
+        const s = await session.getSession();
+        setUserInfo(s);
+    }
     return (
         <View style={styles.container}>
             <View style={styles.textView}>
-                <Text>Welcome Walter Kiprono</Text>
+                <Text>Welcome {userInfo.FullName}</Text>
                 <Text>Your Profile Details Is As Below:</Text>
-                <Text>Gender: Male</Text>
-                <Text>Email: Walter@email.com</Text>
+                <Text>Gender: {userInfo.Gender}</Text>
+                <Text>Email: {userInfo.Email}</Text>
             </View>
         </View>
     );

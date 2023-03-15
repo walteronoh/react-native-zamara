@@ -1,6 +1,7 @@
 import { ApiServiceReturnTypes, ContinentTypes, LoginEndpointDataTypes, LoginTypes, StaffInputsTypes } from "../components/types/types";
 import { XMLParser } from "fast-xml-parser";
-import Mail from "./mail.service";
+import Session from "./session.service";
+const session = new Session();
 
 export default class ApiService {
     AuthApi = "https://dummyjson.com/auth/login";
@@ -8,7 +9,7 @@ export default class ApiService {
     StaffApi = "https://crudcrud.com/api/";
     SmtpApi = "https://www.smtpbucket.com/";
     ContinentsApi = "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso/ListOfContinentsByName";
-    StaffResourceToken = "7b094cb6c58d4ee78be95501de5ed675"
+    StaffResourceToken = "58cddc6145ab4b7885721d74387fa0d6" //"7b094cb6c58d4ee78be95501de5ed675"
     StaffApiUrl = this.StaffApi + this.StaffResourceToken + "/zamara";
 
     async loginApiService(body: LoginTypes): Promise<ApiServiceReturnTypes> {
@@ -16,9 +17,11 @@ export default class ApiService {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)
-        }).then((response) => {
+        }).then(async (response) => {
             if (response.status == 200) {
-                const r = response.json();
+                const res = await response.text();
+                const r = JSON.parse(res);
+                await session.setSession(r.firstName, r.lastName, r.email, r.gender);
                 return {
                     isValid: true,
                     message: "User Login Successful"

@@ -1,7 +1,11 @@
 import { Link } from "@react-navigation/native";
-import { View, Button, Text, StyleSheet } from "react-native";
+import { useEffect } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import Session from "../service/session.service";
 
 export default function Logout() {
+    const session = new Session();
+    useEffect(() => { session.clearSession() }, []);
     return (
         <View style={styles.centeredView}>
             <View style={styles.textView}>
