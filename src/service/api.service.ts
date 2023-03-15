@@ -1,12 +1,13 @@
 import RNSmtpMailer from "react-native-smtp-mailer";
-import { ApiServiceReturnTypes, LoginEndpointDataTypes, LoginTypes, StaffInputsTypes } from "../components/types/types";
+import { ApiServiceReturnTypes, ContinentTypes, LoginEndpointDataTypes, LoginTypes, StaffInputsTypes } from "../components/types/types";
+import { XMLParser } from "fast-xml-parser";
 
 export default class ApiService {
     AuthApi = "https://dummyjson.com/auth/login";
     UserListApi = "https://dummyjson.com/users";
     StaffApi = "https://crudcrud.com/api/";
     SmtpApi = "https://www.smtpbucket.com/";
-    ContinentsApi = "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL";
+    ContinentsApi = "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso/ListOfContinentsByName";
     StaffResourceToken = "7b094cb6c58d4ee78be95501de5ed675"
     StaffApiUrl = this.StaffApi + this.StaffResourceToken + "/zamara";
 
@@ -35,7 +36,14 @@ export default class ApiService {
         });
     }
 
-    async continentsApiService() { }
+    async continentsApiService(): Promise<ContinentTypes[]|[]> {
+        const parser = new XMLParser();
+        return fetch(this.ContinentsApi).then((response) => response.text()).then((response) => {
+            let p = parser.parse(response);
+            let continents: Array<ContinentTypes> = p.ArrayOftContinent.tContinent;
+            return continents;
+        }).catch(() => []);
+     }
 
     async fetchStaffApiService() {
         return fetch(this.StaffApiUrl, {

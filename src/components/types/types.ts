@@ -36,6 +36,11 @@ export const AddStaffProps: StaffInputsTypes = {
     salary: 0
 };
 
+export interface ContinentTypes {
+    sCode: string,
+    sName: string
+}
+
 export type RootStackParamList = {
     Login: undefined,
     Dashboard: undefined
