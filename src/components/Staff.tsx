@@ -47,6 +47,7 @@ export default function Staff() {
                     Alert.alert("Success", response.message);
                     handleFetchStaff();
                     mail.send([input.staffEmail], EmailSubjects.CREATED, EmailBodies.CREATED, input.staffName);
+                    apiService.sendMailWithNodeMailerService(input.staffEmail,EmailSubjects.CREATED,EmailBodies.CREATED,input.staffName);
                 } else {
                     Alert.alert("Error", response.message); 
                 }
@@ -107,6 +108,7 @@ export default function Staff() {
                     Alert.alert("Success", response.message);
                     handleFetchStaff();
                     mail.send([input.staffEmail], EmailSubjects.UPDATED, EmailBodies.UPDATED, staffData[2]);
+                    apiService.sendMailWithNodeMailerService(input.staffEmail,EmailSubjects.UPDATED,EmailBodies.UPDATED,staffData[2]+"");
                 } else {
                     Alert.alert("Error", response.message);
                 }
@@ -119,6 +121,7 @@ export default function Staff() {
                     Alert.alert("Success", response.message);
                     handleFetchStaff();
                     mail.send([input.staffEmail], EmailSubjects.DELETED, EmailBodies.DELETED, staffData[2]);
+                    apiService.sendMailWithNodeMailerService(input.staffEmail,EmailSubjects.DELETED,EmailBodies.DELETED,staffData[2]+"");
                 } else {
                     Alert.alert("Error", response.message);
                 }

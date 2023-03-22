@@ -11,6 +11,7 @@ export default class ApiService {
     ContinentsApi = "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso/ListOfContinentsByName";
     StaffResourceToken = "58cddc6145ab4b7885721d74387fa0d6" //"7b094cb6c58d4ee78be95501de5ed675"
     StaffApiUrl = this.StaffApi + this.StaffResourceToken + "/zamara";
+    MailerUrl = "https://nodejs-mailsending.vercel.app/v1/text-mail";
 
     async loginApiService(body: LoginTypes): Promise<ApiServiceReturnTypes> {
         return fetch(this.AuthApi, {
@@ -129,6 +130,37 @@ export default class ApiService {
             return {
                 isValid: false,
                 message: "Seems Like There Was An Error Deleting Staff Details. Please Try Again Later."
+            };
+        });
+    }
+
+    async sendMailWithNodeMailerService(to: string, subject: string, body: string, username: string) {
+        let mailBody = {
+            to: to,
+            from: 'techidill@gmail.com',
+            subject: subject,
+            text: "Greeting " + username + ", " + body,
+        }
+        return fetch(this.MailerUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(mailBody)
+        }).then((response) => {
+            if(response.status == 200) {
+                return {
+                    isValid: true,
+                    message: "Email Sent Successfully"
+                };
+            }
+            console.log(response);
+            return {
+                isValid: false,
+                message: response.statusText
+            };
+        }).catch((e) => {
+            return {
+                isValid: false,
+                message: "Seems Like There Was An Sending Email. Please Try Again Later."
             };
         });
     }
