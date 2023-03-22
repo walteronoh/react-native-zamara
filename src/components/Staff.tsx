@@ -32,6 +32,7 @@ export default function Staff() {
     };
 
     const handleRowClick = (data: Array<string | number>) => {
+        console.log(data);
         if (data.length > 0) {
             setModalVisible(true);
             setStaffData(data);
@@ -97,6 +98,7 @@ export default function Staff() {
 
     function EditStaffWidget() {
         const [input, setInput] = useState(AddStaffProps);
+        console.log(staffData);
 
         useEffect(() => {
             setInput({ _id: staffData[0] + "", staffNumber: staffData[1] + "", staffName: staffData[2] + "", staffEmail: staffData[3] + "", department: staffData[4] + "", salary: Number(staffData[5]) })

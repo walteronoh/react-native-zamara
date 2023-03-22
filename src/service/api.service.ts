@@ -9,7 +9,7 @@ export default class ApiService {
     StaffApi = "https://crudcrud.com/api/";
     SmtpApi = "https://www.smtpbucket.com/";
     ContinentsApi = "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso/ListOfContinentsByName";
-    StaffResourceToken = "58cddc6145ab4b7885721d74387fa0d6" //"7b094cb6c58d4ee78be95501de5ed675"
+    StaffResourceToken = "ec2595ca015f4827b390f50f10d0557a"
     StaffApiUrl = this.StaffApi + this.StaffResourceToken + "/zamara";
     MailerUrl = "https://nodejs-mailsending.vercel.app/v1/text-mail";
 
@@ -19,6 +19,7 @@ export default class ApiService {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)
         }).then(async (response) => {
+            console.log(response);
             if (response.status == 200) {
                 const res = await response.text();
                 const r = JSON.parse(res);
